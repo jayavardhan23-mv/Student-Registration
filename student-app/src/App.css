@@ -1,0 +1,87 @@
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #eef2ff;
+  line-height: 1.6;
+}
+
+.app {
+  width: 90%;
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px #00000015;
+  text-align: center;
+}
+
+h1 {
+  color: #3730a3;
+  font-size: 28px;
+  line-height: 1.4;
+  margin: 0 0 15px;
+  overflow-wrap: break-word;
+}
+
+h2 {
+  margin-top: 30px;
+  line-height: 1.5;
+}
+
+p {
+  line-height: 1.6;
+  margin: 10px 0;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #3730a3;
+}
+
+.student {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: #eef2ff;
+  border-radius: 8px;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.student strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.student p {
+  margin: 0;
+}
