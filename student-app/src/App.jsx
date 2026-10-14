@@ -1,13 +1,14 @@
-  import { useState } from "react";
+import { useState } from "react";
 import "./App.css";
 
 function App() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [students, setStudents] = useState([]);
+  const [editId, setEditId] = useState(null);
 
-  // Add student
-  const addStudent = (e) => {
+  // Add or update student
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (name.trim() === "" || email.trim() === "") {
@@ -15,21 +16,61 @@ function App() {
       return;
     }
 
-    const newStudent = {
-      id: Date.now(),
-      name: name,
-      email: email,
-    };
+    if (editId !== null) {
+      setStudents(
+        students.map((student) =>
+          student.id === editId
+            ? { ...student, name: name, email: email }
+            : student
+        )
+      );
 
-    setStudents([...students, newStudent]);
+      setEditId(null);
+      alert("Student updated successfully!");
+    } else {
+      const newStudent = {
+        id: Date.now(),
+        name: name.trim(),
+        email: email.trim(),
+      };
+
+      setStudents([...students, newStudent]);
+      alert("Student added successfully!");
+    }
 
     setName("");
     setEmail("");
   };
 
+  // Edit student
+  const editStudent = (student) => {
+    setName(student.name);
+    setEmail(student.email);
+    setEditId(student.id);
+  };
+
   // Delete student
   const deleteStudent = (id) => {
-    setStudents(students.filter((student) => student.id !== id));
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this student?"
+    );
+
+    if (confirmDelete) {
+      setStudents(students.filter((student) => student.id !== id));
+
+      if (editId === id) {
+        setEditId(null);
+        setName("");
+        setEmail("");
+      }
+    }
+  };
+
+  // Cancel editing
+  const cancelEdit = () => {
+    setEditId(null);
+    setName("");
+    setEmail("");
   };
 
   return (
@@ -41,28 +82,44 @@ function App() {
 
       <main className="container">
         <section className="form-section">
-          <h2>Register Student</h2>
+          <h2>
+            {editId !== null ? "Edit Student" : "Register Student"}
+          </h2>
 
-          <form onSubmit={addStudent}>
-            <label>Student Name</label>
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="student-name">Student Name</label>
             <input
+              id="student-name"
               type="text"
               placeholder="Enter student name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              required
             />
 
-            <label>Email Address</label>
+            <label htmlFor="student-email">Email Address</label>
             <input
+              id="student-email"
               type="email"
               placeholder="Enter email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
 
             <button type="submit" className="add-button">
-              Add Student
+              {editId !== null ? "Update Student" : "Add Student"}
             </button>
+
+            {editId !== null && (
+              <button
+                type="button"
+                className="cancel-button"
+                onClick={cancelEdit}
+              >
+                Cancel
+              </button>
+            )}
           </form>
         </section>
 
@@ -82,17 +139,29 @@ function App() {
               {students.map((student, index) => (
                 <div className="student-card" key={student.id}>
                   <div className="student-info">
-                    <h3>{index + 1}. {student.name}</h3>
+                    <h3>
+                      {index + 1}. {student.name}
+                    </h3>
                     <p>{student.email}</p>
                   </div>
 
-                  <button
-                    type="button"
-                    className="delete-button"
-                    onClick={() => deleteStudent(student.id)}
-                  >
-                    Delete
-                  </button>
+                  <div className="student-actions">
+                    <button
+                      type="button"
+                      className="edit-button"
+                      onClick={() => editStudent(student)}
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      type="button"
+                      className="delete-button"
+                      onClick={() => deleteStudent(student.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
